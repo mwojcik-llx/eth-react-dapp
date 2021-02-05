@@ -4,7 +4,7 @@ This is project to present ability of usage Ethereum Blockchain with Smart Contr
 
 Project contains fullstack app:
 * Ethereum blockchain definition files - called in this docs `Truffle` files
-* Ethereum client in React library - called in this docs `Frontend` files 
+* Ethereum client in React library - called in this docs `Frontend` files
 -----------------------------------------------------------------------------------------
 ## Project structure
 In this project there are source files for:
@@ -15,7 +15,7 @@ In this project there are source files for:
 
 ### Frontend
 * `public` - contains React public resources (index.html assets etc.)
-* `src` - contains source files for client app 
+* `src` - contains source files for client app
 -----------------------------------------------------------------------------------------
 ## Prerequisites
 * Nodejs - LTS version
@@ -23,10 +23,11 @@ In this project there are source files for:
 -----------------------------------------------------------------------------------------
 ## Avaliable scripts
 
-### Truffle 
+### Truffle
 * `npm run truffle-compile` - compiles contracts and extract ABI files to `build` directory
+* `npm run truffle-test` - run tests in `test` directory.
 * `npm run truffle-deploy` - deploys contract to blockchain (defined in  `truffle-config.js`)
-* `npm run truffle-develop` - starts local development blockchain ( but preffer use `Ganache` app)
+* `npm run truffle-develop` - starts local development blockchain ( but prefer use `Ganache` app)
 
 ### Frontend
 * `npm run fr-start` - runs application in development locally

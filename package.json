@@ -17,7 +17,14 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "truffle-compile": "truffle compile",
+    "truffle-deploy": "truffle migrate",
+    "truffle-test": "truffle test",
+    "truffle-develop": "truffle develop",
+    "fr-start": "npm run start",
+    "fr-build": "npm run build",
+    "fr-test": "npm run test"
   },
   "eslintConfig": {
     "extends": [
