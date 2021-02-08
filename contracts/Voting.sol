@@ -7,10 +7,25 @@ contract Voting {
         uint id;
         string name;
         Canditate[] candidates;
+        mapping(address => bool) voters;
     }
 
     struct Canditate {
         string name;
+        uint voteCount;
     }
+
+    Campaign[] campaigns;
+    mapping
+
+    constructor() {
+
+    }
+
+    function addCampaign(string name) {
+        require()
+    }
+
+
 
 }
