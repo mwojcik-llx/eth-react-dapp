@@ -21,7 +21,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "truffle-compile": "truffle compile",
-    "posttruffle-compile":"npm run copy-contracts",
+    "posttruffle-compile": "npm run copy-contracts",
     "truffle-deploy": "truffle migrate",
     "truffle-test": "truffle test",
     "truffle-develop": "truffle develop",
