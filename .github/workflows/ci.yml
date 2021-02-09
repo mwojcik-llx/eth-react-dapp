@@ -17,7 +17,4 @@ jobs:
         run: npm run truffle-compile
       
       - name: run contract tests
-        run: npm run truffle-test
-      
-      - name: run frontend tests
-        run: npm run fr-test
+        run: npm run truffle-test 
