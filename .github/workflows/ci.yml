@@ -1,0 +1,20 @@
+name: 'CI Pipeline'
+
+on: push
+
+jobs:
+  test-contracts:
+    name: Test contracts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: install dependencies
+        run: npm ci
+
+      - name: build contracts
+        run: npm run truffle-compile
+      
+      - name: run contract tests
+        run: npm run truffle-test 
