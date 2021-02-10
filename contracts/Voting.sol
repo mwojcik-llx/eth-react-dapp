@@ -16,7 +16,7 @@ contract Voting {
         uint256 voteCount;
     }
 
-    // MODYFIERS
+    // MODIFIERS
 
     modifier _campaignIndexExists(uint256 campaignId) {
         require(

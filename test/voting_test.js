@@ -2,7 +2,7 @@ const Voting = artifacts.require('./Voting');
 const truffleAssert = require('truffle-assertions');
 
 let contractInstance;
-contract('Voting', (accounts) => {
+contract('Voting', () => {
 
     beforeEach(async () => {
         contractInstance = await Voting.new();
@@ -41,7 +41,7 @@ contract('Voting', (accounts) => {
     });
 
     describe('when method addCampaign is called', () => {
-        it('should increse campaignsCounter to 1', async () => {
+        it('should increase campaignsCounter to 1', async () => {
             const expectedCampaignName = 'sample';
 
             await contractInstance.addCampaign(expectedCampaignName);
@@ -49,7 +49,7 @@ contract('Voting', (accounts) => {
             expect(campaignCounter.toNumber()).to.equal(1);
         });
 
-        it('should getCampaignNameByIndex return expcted campaign name', async () => {
+        it('should getCampaignNameByIndex return expected campaign name', async () => {
             const expectedCampaignName = 'sample';
 
             await contractInstance.addCampaign(expectedCampaignName);
@@ -65,7 +65,7 @@ contract('Voting', (accounts) => {
             truffleAssert.eventEmitted(result, 'CampaignCreatedEvent');
         });
 
-        it('should emit CampaignCreatedEvent with correct paramters when method succeed', async () => {
+        it('should emit CampaignCreatedEvent with correct parameters when method succeed', async () => {
             const exampleCampaignName = 'campaign';
             const expectedCampaignIndex = 0;
 
@@ -95,7 +95,7 @@ contract('Voting', (accounts) => {
                 await execute('Sample Campaign Name')
             });
 
-            it('UPPERCASED name', async () => {
+            it('UPPERCASE name', async () => {
                 await execute('SAMPLE CAMPAIGN NAME');
             });
 

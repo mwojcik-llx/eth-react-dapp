@@ -9,7 +9,7 @@ Project contains fullstack app:
 ## Project structure
 In this project there are source files for:
 ### Truffle
-* `contracts` - contains contracts and solidity liblaries definitions
+* `contracts` - contains contracts and solidity libraries definitions
 * `migrations` - contains migration files for deploy `contracts`
 * `test` - contains tests for `contracts`
 
@@ -21,7 +21,7 @@ In this project there are source files for:
 * Nodejs - LTS version
 * Ganache (_optional_ but this is better option for development )
 -----------------------------------------------------------------------------------------
-## Avaliable scripts
+## Available scripts
 
 ### Truffle
 * `npm run truffle-compile` - compiles contracts and extract ABI files to `build` directory
