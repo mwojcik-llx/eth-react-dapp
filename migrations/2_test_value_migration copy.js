@@ -1,5 +1,9 @@
-const Test = artifacts.require("TestContract");
+const VotingContract = artifacts.require("Voting");
+const VotingLibrary = artifacts.require("VotingLib");
 
 module.exports = function (deployer) {
-  deployer.deploy(Test);
+  deployer.deploy(VotingLibrary);
+  deployer.deploy(VotingContract);
+  
+  deployer.link(VotingLibrary, VotingContract);
 };

@@ -1,17 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.22 <0.9.0;
 
-contract Voting {
-    // structs
-    struct Campaign {
-        string name;
-        uint256 candidateCounter;
-    }
+import "./VotingLib.sol";
 
-    struct Candidate {
-        string name;
-        uint256 voteCount;
-    }
+using VotingLib for *;
+
+contract Voting {
 
     // MODYFIERS
 
