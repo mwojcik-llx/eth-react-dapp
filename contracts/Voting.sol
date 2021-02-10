@@ -3,9 +3,9 @@ pragma solidity >=0.4.22 <0.9.0;
 
 import "./VotingLib.sol";
 
-using VotingLib for *;
-
 contract Voting {
+
+    using VotingLib for *;
 
     // MODYFIERS
 
@@ -20,8 +20,8 @@ contract Voting {
     event CandidateInCampaignCreated(uint campaignIndex, string candidateName, uint candidateIndex);
 
     // PRIVATE FIELDS
-    Campaign[] campaigns;
-    mapping(uint256 => Candidate[]) candidatesInCampaign;
+    VotingLib.Campaign[] campaigns;
+    mapping(uint256 => VotingLib.Candidate[]) candidatesInCampaign;
 
     // HELPERS
     mapping(string => bool) usedCampaignNames;
@@ -53,7 +53,7 @@ contract Voting {
         require(!usedCampaignNames[campaignName], 'This campaign name was already registered.');
 
         // Add campaign to array
-        Campaign memory temp = Campaign(campaignName, 0);
+        VotingLib.Campaign memory temp = VotingLib.Campaign(campaignName, 0);
         campaigns.push(temp);
 
         // add usedCampaignsNames
@@ -67,7 +67,7 @@ contract Voting {
         require(usedCandidateNamesInCampaign[campaignIndex][candidateName], 'This candidate name was already registered in this campaign.');
 
         // Add candidate to campaign
-        Candidate memory temp = Candidate(candidateName, 0);
+        VotingLib.Candidate memory temp = VotingLib.Candidate(candidateName, 0);
         candidatesInCampaign[campaignIndex].push(temp);
 
         // TODO: continue implementation
