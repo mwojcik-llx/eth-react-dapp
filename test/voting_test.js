@@ -1,4 +1,5 @@
-let Voting = artifacts.require('./Voting');
+const Voting = artifacts.require('./Voting');
+const truffleAssert = require('truffle-assertions');
 
 let contractInstance;
 contract('Voting', (accounts) => {
@@ -33,7 +34,7 @@ contract('Voting', (accounts) => {
 
         it('should addCandidateToCampaign throw exception when campaign index not exists', async () => {
             let throwsError = false;
-            await contractInstance.addCandidateToCampaign(0, 'sample').catch(() => {throwsError = true});
+            await contractInstance.addCandidateToCampaign(0, 'sample').catch(() => { throwsError = true });
 
             expect(throwsError).to.equal(true);
         });
@@ -54,6 +55,27 @@ contract('Voting', (accounts) => {
             await contractInstance.addCampaign(expectedCampaignName);
             const resultCampaignName = await contractInstance.getCampaignNameByIndex(0);
             expect(resultCampaignName).to.equal(expectedCampaignName);
+        });
+
+        it('should emit CampaignCreatedEvent when method succeed', async () => {
+            const exampleCampaignName = 'campaign';
+
+            const result = await contractInstance.addCampaign(exampleCampaignName);
+
+            truffleAssert.eventEmitted(result, 'CampaignCreatedEvent');
+        });
+
+        it('should emit CampaignCreatedEvent with correct paramters when method succeed', async () => {
+            const exampleCampaignName = 'campaign';
+            const expectedCampaignIndex = 0;
+
+            const result = await contractInstance.addCampaign(exampleCampaignName);
+
+            truffleAssert.eventEmitted(result, 'CampaignCreatedEvent', (ev) => {
+                expect(ev.name).to.equal(exampleCampaignName);
+                expect(ev.campaignIndex.toNumber()).to.equal(expectedCampaignIndex);
+                return true;
+            });
         });
 
         describe('should be able to register campaign with name contains ...', () => {
