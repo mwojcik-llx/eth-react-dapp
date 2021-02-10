@@ -13,6 +13,14 @@ contract Voting {
         uint256 voteCount;
     }
 
+    // MODYFIERS
+
+    modifier _campaignIndexExists(uint campaignId){
+         require(campaigns.length > campaignId, 'Campaign with this index not exists.');
+         _;
+    }
+
+
     // EVENTS
     event CampaignCreatedEvent(string name, uint campaignIndex);
     event CandidateInCampaignCreated(uint campaignIndex, string candidateName, uint candidateIndex);
@@ -41,13 +49,7 @@ contract Voting {
         return campaigns[campaignId].name;
     }
 
-    function getCandidatesCountByCampaignId(uint256 campaignId)
-        public
-        view
-        returns (uint256)
-    {
-        require(campaigns.length > campaignId, 'Campaign with this index not exists.');
-
+    function getCandidatesCountByCampaignId(uint256 campaignId) public view _campaignIndexExists(campaignId) returns (uint256) {
         return candidatesInCampaign[campaignId].length;
     }
 
@@ -67,8 +69,7 @@ contract Voting {
         emit CampaignCreatedEvent(campaignName, campaigns.length - 1);
     }
 
-    function addCandidateToCampaign(uint campaignIndex, string memory candidateName) public {
-        require(campaigns.length > campaignIndex, 'Campaign with this index not exists.');
+    function addCandidateToCampaign(uint campaignIndex, string memory candidateName) public _campaignIndexExists(campaignIndex) {
         require(usedCandidateNamesInCampaign[campaignIndex][candidateName], 'This candidate name was already registered in this campaign.');
 
         // Add candidate to campaign
