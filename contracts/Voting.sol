@@ -4,24 +4,39 @@ pragma solidity >=0.4.22 <0.9.0;
 import "./VotingLib.sol";
 
 contract Voting {
-
     using VotingLib for *;
+
+    struct Campaign {
+        string name;
+        uint256 candidateCounter;
+    }
+
+    struct Candidate {
+        string name;
+        uint256 voteCount;
+    }
 
     // MODYFIERS
 
-    modifier _campaignIndexExists(uint campaignId){
-         require(campaigns.length > campaignId, 'Campaign with this index not exists.');
-         _;
+    modifier _campaignIndexExists(uint256 campaignId) {
+        require(
+            campaigns.length > campaignId,
+            "Campaign with this index not exists."
+        );
+        _;
     }
 
-
     // EVENTS
-    event CampaignCreatedEvent(string name, uint campaignIndex);
-    event CandidateInCampaignCreated(uint campaignIndex, string candidateName, uint candidateIndex);
+    event CampaignCreatedEvent(string name, uint256 campaignIndex);
+    event CandidateInCampaignCreated(
+        uint256 campaignIndex,
+        string candidateName,
+        uint256 candidateIndex
+    );
 
     // PRIVATE FIELDS
-    VotingLib.Campaign[] campaigns;
-    mapping(uint256 => VotingLib.Candidate[]) candidatesInCampaign;
+    Campaign[] campaigns;
+    mapping(uint256 => Candidate[]) candidatesInCampaign;
 
     // HELPERS
     mapping(string => bool) usedCampaignNames;
@@ -39,21 +54,32 @@ contract Voting {
         view
         returns (string memory)
     {
-        require(campaigns.length > campaignId, 'Campaign with this index not exists.');
+        require(
+            campaigns.length > campaignId,
+            "Campaign with this index not exists."
+        );
         return campaigns[campaignId].name;
     }
 
-    function getCandidatesCountByCampaignId(uint256 campaignId) public view _campaignIndexExists(campaignId) returns (uint256) {
+    function getCandidatesCountByCampaignId(uint256 campaignId)
+        public
+        view
+        _campaignIndexExists(campaignId)
+        returns (uint256)
+    {
         return candidatesInCampaign[campaignId].length;
     }
 
     // PUBLIC MOD FUNCTIONS
 
     function addCampaign(string memory campaignName) public {
-        require(!usedCampaignNames[campaignName], 'This campaign name was already registered.');
+        require(
+            !usedCampaignNames[campaignName],
+            "This campaign name was already registered."
+        );
 
         // Add campaign to array
-        VotingLib.Campaign memory temp = VotingLib.Campaign(campaignName, 0);
+        Campaign memory temp = Campaign(campaignName, 0);
         campaigns.push(temp);
 
         // add usedCampaignsNames
@@ -63,11 +89,17 @@ contract Voting {
         emit CampaignCreatedEvent(campaignName, campaigns.length - 1);
     }
 
-    function addCandidateToCampaign(uint campaignIndex, string memory candidateName) public _campaignIndexExists(campaignIndex) {
-        require(usedCandidateNamesInCampaign[campaignIndex][candidateName], 'This candidate name was already registered in this campaign.');
+    function addCandidateToCampaign(
+        uint256 campaignIndex,
+        string memory candidateName
+    ) public _campaignIndexExists(campaignIndex) {
+        require(
+            usedCandidateNamesInCampaign[campaignIndex][candidateName],
+            "This candidate name was already registered in this campaign."
+        );
 
         // Add candidate to campaign
-        VotingLib.Candidate memory temp = VotingLib.Candidate(candidateName, 0);
+        Candidate memory temp = Candidate(candidateName, 0);
         candidatesInCampaign[campaignIndex].push(temp);
 
         // TODO: continue implementation
