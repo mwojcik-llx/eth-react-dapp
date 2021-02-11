@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import 'semantic-ui-css/semantic.min.css'
 
-import 'bootstrap/dist/css/bootstrap.css';
 import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
 import { Menu } from "semantic-ui-react";
 import HomePage from "./pages/home/HomePage";
@@ -13,7 +12,7 @@ import VotingPage from "./pages/voting/VotingPage";
 import NotFoundPage from "./pages/not-found/NotFoundPage";
 
 ReactDOM.render(
-    <React.StrictMode>
+    <React.Fragment>
         <Router>
             <Menu inverted>
                 <Menu.Item as={Link} to='/'>Home</Menu.Item>
@@ -38,6 +37,6 @@ ReactDOM.render(
                 </Route>
             </Switch>
         </Router>
-    </React.StrictMode>,
+    </React.Fragment>,
     document.getElementById('root')
 );
