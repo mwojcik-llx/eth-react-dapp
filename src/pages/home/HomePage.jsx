@@ -2,37 +2,66 @@ import { Component } from 'react';
 import { Button, Card, Grid, Header, Image } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
+import { Utils } from '../../Utils';
+import { createContract } from "../../web3/votingContract";
+import { web3 } from '../../web3/web3';
+
 import './HomePage.css';
 import campaignLogo from '../../assets/campaign-logo.png';
+import CampaignCreatePage from "../campaign-create/CampaignCreatePage";
 
 class HomePage extends Component {
     state = {
-        campaigns: []
+        campaigns: [],
+        contract: null,
+        account: '',
+        isLoggedIn: false,
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        const account = await this._getAccounts();
+
         this.setState({
-            campaigns: this._mockCampaignNamesArray()
-        })
+            account: account,
+            isLoggedIn: !!account,
+            contract: createContract()
+        });
+
+        this.setState({
+            campaigns: await this._createCampaignsArray(),
+        });
     }
 
-    _mockCampaignNamesArray() {
-        return [
-            'Super Campaign 1',
-            'Super Campaign 2',
-            'Super Campaign 3',
-            'Super Campaign 4'
-        ].map((campaignName, index) => ({
-            id: index,
-            name: campaignName
-        }));
+    async _getAccounts() {
+        const accounts = await web3.eth.getAccounts();
+        return accounts.length ? accounts[0] : '';
+    }
+
+    async _createCampaignsArray() {
+        const campaignCounter = +await this.state.contract.methods.getCampaignCount().call();
+        const campaignPromises = Utils.createEmptyArray(campaignCounter)
+            .map(async (_, index) => this._createCampaignObject(index));
+
+        return Promise.all(campaignPromises);
+    }
+
+    async _createCampaignObject(campaignIndex) {
+        const campaignName = await this.state.contract.methods.getCampaignNameByIndex(campaignIndex).call();
+        const candidatesCount = await this.state.contract.methods.getCandidatesCountByCampaignId(campaignIndex).call();
+        return {
+            id: campaignIndex,
+            name: campaignName,
+            candidateCounter: +candidatesCount,
+            candidates: Utils.createEmptyArray(candidatesCount)
+        };
     }
 
     render() {
         return (
             <div>
                 <div className='title-bar'>
-                    <Button primary as={Link} to='/campaign/new'>Create Campaign</Button>
+                    <CampaignCreatePage/>
+                    {/*<Button primary onClick={() => this._modalToggleHandler(true)}>Create Campaign</Button>*/}
                 </div>
                 <Header textAlign='center' size='huge'>Campaigns</Header>
                 <Grid divided padded>

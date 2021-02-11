@@ -1,7 +1,5 @@
 // import logo from './logo.svg';
-// import './App.css';
 import React from 'react';
-import Web3 from 'web3';
 import TestContract from './contracts/TestContract.json';
 import { Web3Service } from './web3.service';
 
