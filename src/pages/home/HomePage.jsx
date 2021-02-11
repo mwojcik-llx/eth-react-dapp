@@ -61,7 +61,6 @@ class HomePage extends Component {
             <div>
                 <div className='title-bar'>
                     <CampaignCreatePage/>
-                    {/*<Button primary onClick={() => this._modalToggleHandler(true)}>Create Campaign</Button>*/}
                 </div>
                 <Header textAlign='center' size='huge'>Campaigns</Header>
                 <Grid divided padded>
