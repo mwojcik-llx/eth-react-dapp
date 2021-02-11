@@ -1,4 +1,4 @@
 #root {
-    height: 100%;
+    min-height: 100%;
     background-image: linear-gradient(45deg, rgba(109, 192, 213, 0), rgba(109, 192, 213, .7));
 }
