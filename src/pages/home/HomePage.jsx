@@ -56,11 +56,27 @@ class HomePage extends Component {
         };
     }
 
+    async createNewCampaign(campaignName){
+        await this.state.contract.methods
+            .addCampaign(campaignName)
+            .send({from: this.state.account})
+            .then(() => this._createCampaignsArray())
+            .then((campaigns) => {
+                this.setState({
+                    campaigns: campaigns
+                })
+            }).catch(err => {
+                console.error(err);
+                //TODO: show error ?
+            });
+        console.log('Campaign created with name:', campaignName);
+    }
+
     render() {
         return (
             <div>
                 <div className='title-bar'>
-                    <CampaignCreatePage/>
+                    <CampaignCreatePage createCampaign={(campaignName) => this.createNewCampaign(campaignName)}/>
                 </div>
                 <Header textAlign='center' size='huge'>Campaigns</Header>
                 <Grid divided padded>
