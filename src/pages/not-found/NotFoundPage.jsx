@@ -8,12 +8,12 @@ class NotFoundPage extends Component {
     render() {
         return (
             <div className='page-not-found'>
-                <div className='page-not-found__error-code'>
+                <h1 className='page-not-found__error-code'>
                     404
-                </div>
-                <div className='page-not-found__error-message'>
+                </h1>
+                <h2 className='page-not-found__error-message'>
                     Page not found
-                </div>
+                </h2>
             </div>
         );
     }
