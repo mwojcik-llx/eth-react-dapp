@@ -48,7 +48,8 @@ class HomePage extends Component {
         const result = await this.state.contract.methods.getCampaigns().call();
 
         const addressesArray = result[0];
-        const namesArray = await addressesArray.map(add => this.state.contract.methods.getCampaignName(add).call());
+        const namesArray = await Promise.all(addressesArray.map(address =>
+            this.state.contract.methods.getCampaignName(address).call()));
         const voteCountsArray = result[1];
         const hasCandidatesArray = result[2];
         const canVoteArray = result[3];
@@ -64,14 +65,21 @@ class HomePage extends Component {
 
     }
 
-    async createNewCampaign(campaignName){
+    async createNewCampaign(campaignName) {
         await this.state.contract.methods
-            .addCampaign(campaignName)
+            .createCampaign(campaignName)
             .send({from: this.state.account})
-            .then(() => this._createCampaignsArray())
-            .then((campaigns) => {
+            .then((address) => {
                 this.setState({
-                    campaigns: campaigns
+                    campaigns: [
+                        ...this.state.campaigns,
+                        {
+                            id: address,
+                            name: campaignName,
+                            voteCount: 0,
+                            hasCandidates: false,
+                            canVote: false,
+                        }]
                 })
             }).catch(err => {
                 console.error(err);
@@ -93,6 +101,11 @@ class HomePage extends Component {
                             <Image src={campaignLogo} wrapped ui={false}/>
                             <Card.Content>
                                 <Card.Header>{campaign.name}</Card.Header>
+                                <Card.Meta>
+                                    <div>Vote count: {campaign.voteCount}</div>
+                                    <div>Has candidates: {campaign.hasCandidates ? 'True' : 'False'}</div>
+                                    <br/>
+                                </Card.Meta>
                                 <Card.Content extra>
                                     <Button primary as={Link} to={`/campaign/${campaign.id}`}>
                                         Preview
