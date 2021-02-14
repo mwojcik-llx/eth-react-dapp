@@ -1,5 +1,4 @@
 import Web3 from 'web3';
-import TruffleContract from '@truffle/contract';
 
 export class Web3Service {
 
@@ -41,12 +40,6 @@ export class Web3Service {
         }
         this._loginFunctionCalled = true;
         return true;
-    }
-
-    async createTruffleContractInstance(contractJson) {
-        const truffleContract = TruffleContract(contractJson);
-        truffleContract.setProvider(this.web3.currentProvider);
-        return truffleContract.deployed();
     }
 
     registerOnAccountChangeAction(accountChangeCallback){

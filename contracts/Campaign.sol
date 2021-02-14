@@ -10,6 +10,7 @@ contract Campaign {
     mapping(address => bool) isVoterVotes;
     Candidate[] candidates;
     mapping(string => bool) isCandidateExists;
+    mapping(address => bool) isAddressExists;
 
 
     constructor(string memory _name) public {
@@ -19,12 +20,23 @@ contract Campaign {
     // SETTERS
 
     function createCandidate(string memory candidateName) public {
-        require(candidateName != '' && !isCandidateExists[candidateName]);
+        require(bytes(candidateName).length > 0 && !isCandidateExists[candidateName]);
 
         Candidate candidate = new Candidate(candidateName);
         candidates.push(candidate);
-        isCampaignExists[campaignName] = true;
-        anyCandidates = true;
+        isCandidateExists[candidateName] = true;
+        isAddressExists[address(candidate)] = true;
+        hasAnyCandidates = true;
+    }
+
+    function voteForCandidate(address candidateAddress) public {
+        require(isAddressExists[candidateAddress] && !isVoterVotes[msg.sender]);
+
+        Candidate candidate = Candidate(candidateAddress);
+        candidate.vote();
+
+        voteCount++;
+        isVoterVotes[msg.sender] = true;
     }
 
 
@@ -41,6 +53,10 @@ contract Campaign {
 
     function hasAtLeastOneCandidate() public view returns (bool) {
         return hasAnyCandidates;
+    }
+
+    function canUserVote() public view returns(bool) {
+        return !isVoterVotes[msg.sender];
     }
 
 

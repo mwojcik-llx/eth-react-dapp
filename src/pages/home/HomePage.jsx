@@ -2,8 +2,7 @@ import { Component } from 'react';
 import { Button, Card, Grid, Header, Image } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
-import { Utils } from '../../Utils';
-import { createContract } from "../../web3/votingContract";
+import { CampaignFactoryContractBuilder } from '../../web3/contractBuilders';
 import { web3 } from '../../web3/web3';
 
 import './HomePage.css';
@@ -11,11 +10,20 @@ import campaignLogo from '../../assets/campaign-logo.png';
 import CampaignCreatePage from "../campaign-create/CampaignCreatePage";
 
 class HomePage extends Component {
-    state = {
-        campaigns: [],
-        contract: null,
-        account: '',
-        isLoggedIn: false,
+
+
+    constructor(props) {
+        super(props);
+
+        const campaignFactoryBuilder = new CampaignFactoryContractBuilder();
+
+        this.state = {
+            campaigns: [],
+            contract: campaignFactoryBuilder.build(),
+            account: '',
+            isLoggedIn: false,
+        }
+
     }
 
     async componentDidMount() {
@@ -24,7 +32,6 @@ class HomePage extends Component {
         this.setState({
             account: account,
             isLoggedIn: !!account,
-            contract: createContract()
         });
 
         this.setState({
@@ -38,22 +45,23 @@ class HomePage extends Component {
     }
 
     async _createCampaignsArray() {
-        const campaignCounter = +await this.state.contract.methods.getCampaignCount().call();
-        const campaignPromises = Utils.createEmptyArray(campaignCounter)
-            .map(async (_, index) => this._createCampaignObject(index));
+        const result = await this.state.contract.methods.getCampaigns().call();
 
-        return Promise.all(campaignPromises);
-    }
+        const addressesArray = result[0];
+        const namesArray = await addressesArray.map(add => this.state.contract.methods.getCampaignName(add).call());
+        const voteCountsArray = result[1];
+        const hasCandidatesArray = result[2];
+        const canVoteArray = result[3];
 
-    async _createCampaignObject(campaignIndex) {
-        const campaignName = await this.state.contract.methods.getCampaignNameByIndex(campaignIndex).call();
-        const candidatesCount = await this.state.contract.methods.getCandidatesCountByCampaignId(campaignIndex).call();
-        return {
-            id: campaignIndex,
-            name: campaignName,
-            candidateCounter: +candidatesCount,
-            candidates: Utils.createEmptyArray(candidatesCount)
-        };
+        return addressesArray.map((add, index) => ({
+            id: add,
+            name: namesArray[index],
+            voteCount: voteCountsArray[index],
+            hasCandidates: hasCandidatesArray[index],
+            canVote: canVoteArray[index],
+        }));
+
+
     }
 
     render() {
