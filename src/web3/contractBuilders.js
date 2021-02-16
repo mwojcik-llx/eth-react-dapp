@@ -5,8 +5,27 @@ function createContract(abi, contractAddress) {
 }
 
 export class CampaignFactoryContractBuilder {
-    address = '0x20eDE474bf7Ac55e57B2f976D115717cf7960a94';
+    address = '0x7209B9355E3fAa1d62A2c8fF97C28aaC3A16d32a';
     abi = [
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": false,
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                }
+            ],
+            "name": "CampaignCreated",
+            "type": "event"
+        },
         {
             "constant": false,
             "inputs": [
@@ -128,6 +147,36 @@ export class CampaignContractBuilder {
         {
             "constant": true,
             "inputs": [],
+            "name": "getCampaignInfo",
+            "outputs": [
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
+                },
+                {
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [],
             "name": "getName",
             "outputs": [
                 {
@@ -189,6 +238,7 @@ export class CampaignContractBuilder {
 
     withAddress(contractAddress){
         this.address = contractAddress;
+        return this;
     }
 
     build() {

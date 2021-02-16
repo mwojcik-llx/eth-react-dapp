@@ -15,15 +15,38 @@ class HomePage extends Component {
     constructor(props) {
         super(props);
 
-        const campaignFactoryBuilder = new CampaignFactoryContractBuilder();
+        const contract = new CampaignFactoryContractBuilder().build();
 
         this.state = {
             campaigns: [],
-            contract: campaignFactoryBuilder.build(),
+            contract: contract,
             account: '',
             isLoggedIn: false,
         }
+        this.subscribeToEvents();
 
+    }
+
+    subscribeToEvents(){
+        this.state.contract.events.CampaignCreated({},(err, result) => {
+
+            console.log(result);
+            const newCampaignAddress = result.returnValues[0];
+            const newCampaignName = result.returnValues[1];
+
+            this.setState({
+                campaigns: [
+                    ...this.state.campaigns,
+                    {
+                        id: newCampaignAddress,
+                        name: newCampaignName,
+                        voteCount: 0,
+                        hasCandidates: false,
+                        canVote: false,
+                    }
+                ]
+            });
+        });
     }
 
     async componentDidMount() {
@@ -66,26 +89,12 @@ class HomePage extends Component {
     }
 
     async createNewCampaign(campaignName) {
-        await this.state.contract.methods
-            .createCampaign(campaignName)
+        await this.state.contract.methods.createCampaign(campaignName)
             .send({from: this.state.account})
-            .then((address) => {
-                this.setState({
-                    campaigns: [
-                        ...this.state.campaigns,
-                        {
-                            id: address,
-                            name: campaignName,
-                            voteCount: 0,
-                            hasCandidates: false,
-                            canVote: false,
-                        }]
-                })
-            }).catch(err => {
+            .catch(err => {
                 console.error(err);
                 //TODO: show error ?
             });
-        console.log('Campaign created with name:', campaignName);
     }
 
     render() {

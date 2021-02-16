@@ -7,14 +7,16 @@ contract CampaignFactory {
     mapping(string => bool) isCampaignExists;
     mapping(address => bool) isAddressExists;
 
-    function createCampaign(string memory campaignName) public returns (address) {
+    event CampaignCreated(address, string);
+
+    function createCampaign(string memory campaignName) public {
         require(bytes(campaignName).length > 0 && !isCampaignExists[campaignName]);
 
         Campaign campaign = new Campaign(campaignName);
         campaigns.push(campaign);
         isCampaignExists[campaignName] = true;
         isAddressExists[address(campaign)] = true;
-        return address(campaign);
+        emit CampaignCreated(address(campaign), campaignName);
     }
 
     function getCampaigns() public view returns (address[] memory, uint[] memory, bool[] memory, bool[] memory){

@@ -42,6 +42,12 @@ contract Campaign {
 
     // GETTERS
 
+    function getCampaignInfo() public view returns (string memory _name, uint _voteCount, bool _hasCandidates, bool _canVote) {
+        _name = getName();
+        _voteCount = getVoteCount();
+        _hasCandidates = hasAtLeastOneCandidate();
+        _canVote = canUserVote();
+    }
 
     function getName() public view returns (string memory) {
         return name;
@@ -55,7 +61,7 @@ contract Campaign {
         return hasAnyCandidates;
     }
 
-    function canUserVote() public view returns(bool) {
+    function canUserVote() public view returns (bool) {
         return !isVoterVotes[msg.sender];
     }
 
