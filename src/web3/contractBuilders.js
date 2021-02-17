@@ -5,7 +5,7 @@ function createContract(abi, contractAddress) {
 }
 
 export class CampaignFactoryContractBuilder {
-    address = '0x7209B9355E3fAa1d62A2c8fF97C28aaC3A16d32a';
+    address = '0x29bfB384A78b76021b33d67e5846a179753DA939';
     abi = [
         {
             "anonymous": false,
