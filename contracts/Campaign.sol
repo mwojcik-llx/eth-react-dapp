@@ -49,6 +49,19 @@ contract Campaign {
         _canVote = canUserVote();
     }
 
+    function getCandidatesIds() public view returns (address[] memory){
+        address[] memory _addresses = new address[](candidates.length);
+        for (uint i = 0; i < candidates.length; i++) {
+            _addresses[i] = address(candidates[i]);
+        }
+        return (_addresses);
+    }
+
+    function getCandidateNameById(address candidateAddress) public view returns (string memory) {
+        require(isAddressExists[candidateAddress]);
+        return Candidate(candidateAddress).getName();
+    }
+
     function getName() public view returns (string memory) {
         return name;
     }

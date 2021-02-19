@@ -5,7 +5,7 @@ function createContract(abi, contractAddress) {
 }
 
 export class CampaignFactoryContractBuilder {
-    address = '0x29bfB384A78b76021b33d67e5846a179753DA939';
+    address = '0x09a6Ea5C9240470c70c20844d5d7D5DD2dF0d24E';
     abi = [
         {
             "anonymous": false,
@@ -151,23 +151,59 @@ export class CampaignContractBuilder {
             "outputs": [
                 {
                     "internalType": "string",
-                    "name": "",
+                    "name": "_name",
                     "type": "string"
                 },
                 {
                     "internalType": "uint256",
-                    "name": "",
+                    "name": "_voteCount",
                     "type": "uint256"
                 },
                 {
                     "internalType": "bool",
-                    "name": "",
+                    "name": "_hasCandidates",
                     "type": "bool"
                 },
                 {
                     "internalType": "bool",
-                    "name": "",
+                    "name": "_canVote",
                     "type": "bool"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "getCandidatesIds",
+            "outputs": [
+                {
+                    "internalType": "address[]",
+                    "name": "",
+                    "type": "address[]"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "candidateAddress",
+                    "type": "address"
+                }
+            ],
+            "name": "getCandidateNameById",
+            "outputs": [
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
                 }
             ],
             "payable": false,

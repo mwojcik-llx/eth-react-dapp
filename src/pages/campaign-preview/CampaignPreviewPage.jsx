@@ -25,10 +25,27 @@ class CampaignPreviewPage extends Component {
         const hasCandidates = result[2] || 0;
         const canVote = result[3] || 0;
 
+        const candidatesIds = await this.state.contract.methods.getCandidatesIds().call();
+
+        const candidateNames = await Promise.all(candidatesIds.map(candidateId => {
+            return this.state.contract.methods.getCandidateNameById(candidateId).call();
+        }));
+
+        const candidates = candidatesIds.map((candidateId, index) => ({
+            id: candidateId,
+            name: candidateNames[index]
+        }));
+
         this.setState({
-            campaign: {name, voteCount, hasCandidates, canVote}
+            campaign: {name, voteCount, hasCandidates, canVote, candidates}
         })
         console.log('result', result);
+    }
+
+    async createCandidate() {
+        await this.state.contract.methods.createCandidate('x1').send({
+            from: '0x7E1dDdB9EA1C93d3A15eE69a61A5581cc4726ACC'
+        })
     }
 
     render() {
