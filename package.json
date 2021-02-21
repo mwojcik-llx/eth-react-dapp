@@ -6,9 +6,7 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.3",
     "@testing-library/user-event": "^12.6.2",
-    "@truffle/contract": "^4.3.6",
     "bootstrap": "^4.6.0",
-    "copyfiles": "^2.4.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
@@ -25,13 +23,14 @@
     "eject": "react-scripts eject",
     "truffle-compile": "truffle compile",
     "posttruffle-compile": "npm run copy-contracts",
+    "posttruffle-migrate": "npm run copy-contracts",
     "truffle-deploy": "truffle migrate",
     "truffle-test": "truffle test",
     "truffle-develop": "truffle develop",
     "fr-start": "npm run start",
     "fr-build": "npm run build",
     "fr-test": "npm run test",
-    "copy-contracts": "copyfiles -f build/contracts/*.json src/contracts"
+    "copy-contracts": "node copy-abi-files"
   },
   "eslintConfig": {
     "extends": [
@@ -52,6 +51,7 @@
     ]
   },
   "devDependencies": {
+    "fs": "0.0.1-security",
     "truffle": "^5.1.67",
     "truffle-assertions": "^0.9.2"
   }
