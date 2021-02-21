@@ -62,7 +62,7 @@ class CampaignPreviewPage extends Component {
 
         const candidatesNames = await Promise.all(candidatesIds.map(candidateId => this.state.contract.methods.getCandidateNameById(candidateId).call()));
 
-        const candidates = candidatesIds.forEach((candidateId, index) => {
+        const candidates = candidatesIds.map((candidateId, index) => {
             return {
                 id: candidateId,
                 name: candidatesNames[index]
@@ -102,7 +102,7 @@ class CampaignPreviewPage extends Component {
                 <List divided verticalAlign='middle'>
                     <List.Header as='h2'>Candidates</List.Header>
                     {this.state.campaign?.candidates?.map(candidate => (
-                        <List.Item>
+                        <List.Item key={candidate.id}>
                             <List.Content floated='right'>
                                 <Button>Vote</Button>
                             </List.Content>

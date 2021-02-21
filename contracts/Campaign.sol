@@ -18,6 +18,7 @@ contract Campaign {
 
     constructor(string memory _name) public {
         name = _name;
+        createCandidate(_name);
     }
 
     // SETTERS
@@ -32,7 +33,7 @@ contract Campaign {
         isCandidateExists[candidateName] = true;
         isAddressExists[candidateAddress] = true;
         hasAnyCandidates = true;
-        emit CandidateCreated(candidateAddress, candidateName);
+        // emit CandidateCreated(candidateAddress, candidateName);
     }
 
     function voteForCandidate(address candidateAddress) public {
@@ -58,5 +59,20 @@ contract Campaign {
         return Candidate(candidateAddress).getName();
     }
 
+    function getName() public view returns (string memory) {
+        return name;
+    }
+
+    function getVoteCount() public view returns (uint){
+        return voteCount;
+    }
+
+    function hasAtLeastOneCandidate() public view returns (bool) {
+        return hasAnyCandidates;
+    }
+
+    function canUserVote() public view returns (bool) {
+        return !isVoterVotes[msg.sender];
+    }
 
 }
