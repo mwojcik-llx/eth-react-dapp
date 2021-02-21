@@ -6,7 +6,6 @@ import 'semantic-ui-css/semantic.min.css'
 import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
 import { Menu } from "semantic-ui-react";
 import HomePage from "./pages/home/HomePage";
-import CreateCampaignPage from "./pages/campaign-create/CampaignCreatePage";
 import CampaignPreviewPage from "./pages/campaign-preview/CampaignPreviewPage";
 import VotingPage from "./pages/voting/VotingPage";
 import NotFoundPage from "./pages/not-found/NotFoundPage";
@@ -22,9 +21,6 @@ ReactDOM.render(
             <Switch>
                 <Route exact path='/'>
                     <HomePage/>
-                </Route>
-                <Route path='/campaign/new'>
-                    <CreateCampaignPage/>
                 </Route>
                 <Route path='/campaign/:campaignId'>
                     <CampaignPreviewPage/>

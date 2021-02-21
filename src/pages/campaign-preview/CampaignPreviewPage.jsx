@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Container, Header } from "semantic-ui-react";
+import { Button, Container, Header, List } from "semantic-ui-react";
 import { getAccounts, CampaignContractBuilder } from "../../web3";
+import PromptModal from "../../components/PromptModal";
 
 class CampaignPreviewPage extends Component {
 
@@ -16,15 +17,36 @@ class CampaignPreviewPage extends Component {
             contract: contract,
             campaign: null,
         }
+        this.subscribeToEvents();
+    }
+
+    subscribeToEvents() {
+        this.state.contract.events.CandidateCreated({}, (err, result) => {
+            const candidateAddress = result.returnValues[0];
+            const candidateName = result.returnValues[1];
+
+            this.setState({
+                campaign: {
+                    candidates: [
+                        ...this.state.campaign.candidates,
+                        {
+                            id: candidateAddress,
+                            name: candidateName
+                        }
+                    ]
+                }
+            });
+        });
     }
 
     async componentDidMount() {
+        this.subscribeToEvents();
         const account = await getAccounts(this.props.history);
         const campaign = await this.getCampaignInfo();
 
         this.setState({
-            account,
-            campaign
+            account: account,
+            campaign: campaign
         });
     }
 
@@ -34,7 +56,9 @@ class CampaignPreviewPage extends Component {
         const voteCount = result[1] || 0;
         const hasCandidates = result[2] || 0;
         const canVote = result[3] || 0;
-        const candidatesIds = result[4] || [];
+        let candidatesIds = result[4] || [];
+
+        candidatesIds = candidatesIds.filter(s => s !== '0x0000000000000000000000000000000000000000');
 
         const candidatesNames = await Promise.all(candidatesIds.map(candidateId => this.state.contract.methods.getCandidateNameById(candidateId).call()));
 
@@ -54,16 +78,38 @@ class CampaignPreviewPage extends Component {
         }
     }
 
-    async createCandidate() {
-        await this.state.contract.methods.createCandidate('x1').send({
-            from: '0xb925B1e447dd6C41E8eD2784c4bfb27c44B5fA2A'
-        })
+    async createCandidate(candidateName) {
+        await this.state.contract.methods.createCandidate(candidateName).send({
+            from: this.state.account
+        }).then((err, res) => {
+            console.log(err,res);
+        });
     }
 
     render() {
         return (
-            <Container style={{marginTop: '3em'}}>
-                <Header as='h1'>{this.state.campaign?.name}</Header>
+            <Container>
+
+                <div className='create-button-container'>
+                    <PromptModal
+                        inputLabel='Candidate name'
+                        triggerButtonText='Add Candidate'
+                        modalTitle='Add Candidate'
+                        submitCallback={(candidateName) => this.createCandidate(candidateName)}/>
+                </div>
+                <Header as='h1' textAlign='center'>{this.state.campaign?.name}</Header>
+                <br/>
+                <List divided verticalAlign='middle'>
+                    <List.Header as='h2'>Candidates</List.Header>
+                    {this.state.campaign?.candidates?.map(candidate => (
+                        <List.Item>
+                            <List.Content floated='right'>
+                                <Button>Vote</Button>
+                            </List.Content>
+                            <List.Content>{candidate.name}</List.Content>
+                        </List.Item>
+                    ))}
+                </List>
             </Container>
         );
     }

@@ -1,13 +1,23 @@
 import React from 'react';
 import { Button, Form, Modal } from "semantic-ui-react";
 
+/**
+ * Required props:
+ * - func - submitCallback - required
+ * - string - inputLabel - required
+ * - string - inputPlaceholder - optional
+ * - string - triggerButtonText - required
+ * - string - modalTitle - required
+ * - string - cancelButtonText - optional
+ * - string - submitButtonText - optional
+ */
+class PromptModal extends React.Component {
 
-class CampaignCreatePage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             isOpened: false,
-            campaignName: '',
+            inputValue: '',
             isSubmitDisabled: true,
         }
     }
@@ -21,21 +31,21 @@ class CampaignCreatePage extends React.Component {
     closeModal(){
         this.setState({
             isOpen: false,
-            campaignName: '',
+            inputValue: '',
             isSubmitDisabled: true,
         })
     }
 
-    onCampaignNameChange(ev) {
+    onInputValueChange(ev) {
         const value = ev.target.value;
         this.setState({
-            campaignName: value,
+            inputValue: value,
             isSubmitDisabled: !value
         });
     }
 
-    onCampaignCreateSubmit(){
-        this.props.createCampaign(this.state.campaignName).then(() => {
+    onSubmit(){
+        this.props.submitCallback(this.state.inputValue).then(() => {
             this.closeModal();
         });
     }
@@ -47,24 +57,24 @@ class CampaignCreatePage extends React.Component {
                     onClose={() => this.closeModal()}
                     onOpen={() => this.openModal()}
                     open={this.state.isOpen}
-                    trigger={<Button>Create Campaign</Button>}>
-                    <Modal.Header>Create Campaign</Modal.Header>
+                    trigger={<Button>{this.props.triggerButtonText}</Button>}>
+                    <Modal.Header>{this.props.modalTitle}</Modal.Header>
                     <Modal.Content>
                         <Form>
                             <Form.Field required>
-                                <Form.Input label='Campaign name'
-                                            placeholder='Campaign name'
-                                            value={this.state.campaignName}
-                                            onChange={(ev) => this.onCampaignNameChange(ev)}/>
+                                <Form.Input label={this.props.inputLabel}
+                                            placeholder={this.props.inputPlaceholder || this.props.inputLabel}
+                                            value={this.state.inputValue}
+                                            onChange={(ev) => this.onInputValueChange(ev)}/>
                             </Form.Field>
                         </Form>
                     </Modal.Content>
                     <Modal.Actions>
                         <Button onClick={() => this.closeModal()}>
-                            Cancel
+                            {this.props.cancelButtonText || 'Cancel'}
                         </Button>
-                        <Button disabled={this.state.isSubmitDisabled} onClick={() => this.onCampaignCreateSubmit()} positive>
-                            Create
+                        <Button disabled={this.state.isSubmitDisabled} onClick={() => this.onSubmit()} positive>
+                            {this.props.submitButtonText || 'Create'}
                         </Button>
                     </Modal.Actions>
                 </Modal>
@@ -73,4 +83,4 @@ class CampaignCreatePage extends React.Component {
     }
 }
 
-export default CampaignCreatePage;
+export default PromptModal;

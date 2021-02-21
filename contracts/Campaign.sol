@@ -13,6 +13,8 @@ contract Campaign {
     mapping(string => bool) isCandidateExists;
     mapping(address => bool) isAddressExists;
 
+    event CandidateCreated(address, string);
+
 
     constructor(string memory _name) public {
         name = _name;
@@ -24,11 +26,13 @@ contract Campaign {
         require(bytes(candidateName).length > 0 && !isCandidateExists[candidateName]);
 
         Candidate candidate = new Candidate(candidateName);
+        address candidateAddress = address(candidate);
         candidates.push(candidate);
-        candidatesAddresses.push(address(candidate));
+        candidatesAddresses.push(candidateAddress);
         isCandidateExists[candidateName] = true;
-        isAddressExists[address(candidate)] = true;
+        isAddressExists[candidateAddress] = true;
         hasAnyCandidates = true;
+        emit CandidateCreated(candidateAddress, candidateName);
     }
 
     function voteForCandidate(address candidateAddress) public {

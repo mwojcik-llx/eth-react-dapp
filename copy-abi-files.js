@@ -19,7 +19,7 @@ function execute(contractName) {
 
     fs.writeFileSync(
         `${outputPath}${contractName}${contractFileExtension}`,
-        JSON.stringify(json.abi),
+        JSON.stringify(json.abi, null, 2),
         {
             encoding: "utf-8",
             flag: 'w'

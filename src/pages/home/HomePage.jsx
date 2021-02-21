@@ -1,11 +1,11 @@
-import { Component } from 'react';
-import { Button, Card, Grid, Header, Image } from "semantic-ui-react";
+import React, { Component } from 'react';
+import { Button, Card, Container, Grid, Header, Image } from "semantic-ui-react";
 import { Link, withRouter } from "react-router-dom";
 import { getAccounts, CampaignFactoryContractBuilder } from '../../web3';
 
 import './HomePage.css';
 import campaignLogo from '../../assets/campaign-logo.png';
-import CampaignCreatePage from "../campaign-create/CampaignCreatePage";
+import PromptModal from "../../components/PromptModal";
 
 class HomePage extends Component {
 
@@ -26,8 +26,6 @@ class HomePage extends Component {
 
     subscribeToEvents() {
         this.state.contract.events.CampaignCreated({}, (err, result) => {
-
-            console.log(result);
             const newCampaignAddress = result.returnValues[0];
             const newCampaignName = result.returnValues[1];
 
@@ -90,9 +88,13 @@ class HomePage extends Component {
 
     render() {
         return (
-            <div>
-                <div className='title-bar'>
-                    <CampaignCreatePage createCampaign={(campaignName) => this.createNewCampaign(campaignName)}/>
+            <Container>
+                <div className='create-button-container'>
+                    <PromptModal
+                        inputLabel='Campaign name'
+                        triggerButtonText='Create campaign'
+                        modalTitle='Create Campaign'
+                        submitCallback={(campaignName) => this.createNewCampaign(campaignName)}/>
                 </div>
                 <Header textAlign='center' size='huge'>Campaigns</Header>
                 <Grid divided padded>
@@ -115,7 +117,7 @@ class HomePage extends Component {
                         </Card>
                     ))}
                 </Grid>
-            </div>
+            </Container>
         );
     }
 }
