@@ -5,7 +5,7 @@ function createContract(abi, contractAddress) {
 }
 
 export class CampaignFactoryContractBuilder {
-    address = '0x09a6Ea5C9240470c70c20844d5d7D5DD2dF0d24E';
+    address = '0x50b81e6e6c82926aEC3e02e1308E474dF57d3895';
     abi = [
         {
             "anonymous": false,
@@ -151,23 +151,28 @@ export class CampaignContractBuilder {
             "outputs": [
                 {
                     "internalType": "string",
-                    "name": "_name",
+                    "name": "",
                     "type": "string"
                 },
                 {
                     "internalType": "uint256",
-                    "name": "_voteCount",
+                    "name": "",
                     "type": "uint256"
                 },
                 {
                     "internalType": "bool",
-                    "name": "_hasCandidates",
+                    "name": "",
                     "type": "bool"
                 },
                 {
                     "internalType": "bool",
-                    "name": "_canVote",
+                    "name": "",
                     "type": "bool"
+                },
+                {
+                    "internalType": "address[]",
+                    "name": "",
+                    "type": "address[]"
                 }
             ],
             "payable": false,

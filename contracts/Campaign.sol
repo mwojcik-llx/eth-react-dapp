@@ -9,6 +9,7 @@ contract Campaign {
     bool hasAnyCandidates;
     mapping(address => bool) isVoterVotes;
     Candidate[] candidates;
+    address[] candidatesAddresses;
     mapping(string => bool) isCandidateExists;
     mapping(address => bool) isAddressExists;
 
@@ -24,6 +25,7 @@ contract Campaign {
 
         Candidate candidate = new Candidate(candidateName);
         candidates.push(candidate);
+        candidatesAddresses.push(address(candidate));
         isCandidateExists[candidateName] = true;
         isAddressExists[address(candidate)] = true;
         hasAnyCandidates = true;
@@ -42,40 +44,14 @@ contract Campaign {
 
     // GETTERS
 
-    function getCampaignInfo() public view returns (string memory _name, uint _voteCount, bool _hasCandidates, bool _canVote) {
-        _name = getName();
-        _voteCount = getVoteCount();
-        _hasCandidates = hasAtLeastOneCandidate();
-        _canVote = canUserVote();
+    function getCampaignInfo() public view returns (string memory, uint, bool, bool, address [] memory) {
+        return (name, voteCount, hasAnyCandidates, !isVoterVotes[msg.sender], candidatesAddresses);
     }
 
-    function getCandidatesIds() public view returns (address[] memory){
-        address[] memory _addresses = new address[](candidates.length);
-        for (uint i = 0; i < candidates.length; i++) {
-            _addresses[i] = address(candidates[i]);
-        }
-        return (_addresses);
-    }
 
     function getCandidateNameById(address candidateAddress) public view returns (string memory) {
         require(isAddressExists[candidateAddress]);
         return Candidate(candidateAddress).getName();
-    }
-
-    function getName() public view returns (string memory) {
-        return name;
-    }
-
-    function getVoteCount() public view returns (uint){
-        return voteCount;
-    }
-
-    function hasAtLeastOneCandidate() public view returns (bool) {
-        return hasAnyCandidates;
-    }
-
-    function canUserVote() public view returns (bool) {
-        return !isVoterVotes[msg.sender];
     }
 
 

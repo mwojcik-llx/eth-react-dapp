@@ -19,32 +19,40 @@ class CampaignPreviewPage extends Component {
     }
 
     async componentDidMount() {
+        const campaign = await this.getCampaignInfo();
+
+        this.setState({campaign});
+    }
+
+    async getCampaignInfo() {
         const result = await this.state.contract.methods.getCampaignInfo().call();
         const name = result[0] || '';
         const voteCount = result[1] || 0;
         const hasCandidates = result[2] || 0;
         const canVote = result[3] || 0;
+        const candidatesIds = result[4] || [];
 
-        const candidatesIds = await this.state.contract.methods.getCandidatesIds().call();
+        const candidatesNames = await Promise.all(candidatesIds.map(candidateId => this.state.contract.methods.getCandidateNameById(candidateId).call()));
 
-        const candidateNames = await Promise.all(candidatesIds.map(candidateId => {
-            return this.state.contract.methods.getCandidateNameById(candidateId).call();
-        }));
+        const candidates = candidatesIds.forEach((candidateId, index) => {
+            return {
+                id: candidateId,
+                name: candidatesNames[index]
+            }
+        });
 
-        const candidates = candidatesIds.map((candidateId, index) => ({
-            id: candidateId,
-            name: candidateNames[index]
-        }));
-
-        this.setState({
-            campaign: {name, voteCount, hasCandidates, canVote, candidates}
-        })
-        console.log('result', result);
+        return {
+            name,
+            voteCount,
+            hasCandidates,
+            canVote,
+            candidates
+        }
     }
 
     async createCandidate() {
         await this.state.contract.methods.createCandidate('x1').send({
-            from: '0x7E1dDdB9EA1C93d3A15eE69a61A5581cc4726ACC'
+            from: '0xb925B1e447dd6C41E8eD2784c4bfb27c44B5fA2A'
         })
     }
 
