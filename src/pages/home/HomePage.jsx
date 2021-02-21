@@ -1,9 +1,7 @@
 import { Component } from 'react';
 import { Button, Card, Grid, Header, Image } from "semantic-ui-react";
-import { Link } from "react-router-dom";
-
-import { CampaignFactoryContractBuilder } from '../../web3/contractBuilders';
-import { web3 } from '../../web3/web3';
+import { Link, withRouter } from "react-router-dom";
+import { getAccounts, CampaignFactoryContractBuilder } from '../../web3';
 
 import './HomePage.css';
 import campaignLogo from '../../assets/campaign-logo.png';
@@ -20,15 +18,14 @@ class HomePage extends Component {
         this.state = {
             campaigns: [],
             contract: contract,
-            account: '',
-            isLoggedIn: false,
+            account: ''
         }
         this.subscribeToEvents();
 
     }
 
-    subscribeToEvents(){
-        this.state.contract.events.CampaignCreated({},(err, result) => {
+    subscribeToEvents() {
+        this.state.contract.events.CampaignCreated({}, (err, result) => {
 
             console.log(result);
             const newCampaignAddress = result.returnValues[0];
@@ -50,21 +47,15 @@ class HomePage extends Component {
     }
 
     async componentDidMount() {
-        const account = await this._getAccounts();
+        const account = await getAccounts(this.props.history);
 
         this.setState({
-            account: account,
-            isLoggedIn: !!account,
+            account
         });
 
         this.setState({
             campaigns: await this._createCampaignsArray(),
         });
-    }
-
-    async _getAccounts() {
-        const accounts = await web3.eth.getAccounts();
-        return accounts.length ? accounts[0] : '';
     }
 
     async _createCampaignsArray() {
@@ -129,4 +120,4 @@ class HomePage extends Component {
     }
 }
 
-export default HomePage;
+export default withRouter(HomePage);

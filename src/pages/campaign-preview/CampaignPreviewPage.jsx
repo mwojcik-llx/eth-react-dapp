@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { CampaignContractBuilder } from "../../web3/contractBuilders";
 import { Container, Header } from "semantic-ui-react";
+import { getAccounts, CampaignContractBuilder } from "../../web3";
 
 class CampaignPreviewPage extends Component {
 
@@ -19,9 +19,13 @@ class CampaignPreviewPage extends Component {
     }
 
     async componentDidMount() {
+        const account = await getAccounts(this.props.history);
         const campaign = await this.getCampaignInfo();
 
-        this.setState({campaign});
+        this.setState({
+            account,
+            campaign
+        });
     }
 
     async getCampaignInfo() {
