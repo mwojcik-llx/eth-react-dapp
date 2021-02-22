@@ -19,7 +19,6 @@
     "type": "event"
   },
   {
-    "constant": false,
     "inputs": [
       {
         "internalType": "string",
@@ -29,12 +28,10 @@
     ],
     "name": "createCampaign",
     "outputs": [],
-    "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "constant": true,
     "inputs": [],
     "name": "getCampaigns",
     "outputs": [
@@ -59,12 +56,11 @@
         "type": "bool[]"
       }
     ],
-    "payable": false,
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
-    "constant": true,
     "inputs": [
       {
         "internalType": "address",
@@ -80,8 +76,8 @@
         "type": "string"
       }
     ],
-    "payable": false,
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   }
 ]

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity >=0.4.22 <0.9.0;
 
 import "./Candidate.sol";
@@ -5,35 +6,35 @@ import "./Candidate.sol";
 contract Campaign {
 
     string name;
-    uint voteCount;
-    bool hasAnyCandidates;
-    mapping(address => bool) isVoterVotes;
+
     Candidate[] candidates;
-    address[] candidatesAddresses;
     mapping(string => bool) isCandidateExists;
     mapping(address => bool) isAddressExists;
+
+    uint voteCount;
+    mapping(address => bool) isVoterVotes;
 
     event CandidateCreated(address, string);
 
 
-    constructor(string memory _name) public {
+    constructor(string memory _name) {
         name = _name;
-        createCandidate(_name);
     }
 
     // SETTERS
 
-    function createCandidate(string memory candidateName) public {
-        require(bytes(candidateName).length > 0 && !isCandidateExists[candidateName]);
+    function createCandidate(string memory _candidateName) public {
+        require(bytes(_candidateName).length > 0 && !isCandidateExists[_candidateName]);
 
-        Candidate candidate = new Candidate(candidateName);
-        address candidateAddress = address(candidate);
-        candidates.push(candidate);
-        candidatesAddresses.push(candidateAddress);
-        isCandidateExists[candidateName] = true;
+        Candidate _candidate = new Candidate(_candidateName);
+        candidates.push(_candidate);
+
+        isCandidateExists[_candidateName] = true;
+
+        address candidateAddress = address(_candidate);
         isAddressExists[candidateAddress] = true;
-        hasAnyCandidates = true;
-        // emit CandidateCreated(candidateAddress, candidateName);
+
+        emit CandidateCreated(candidateAddress, _candidateName);
     }
 
     function voteForCandidate(address candidateAddress) public {
@@ -49,8 +50,12 @@ contract Campaign {
 
     // GETTERS
 
-    function getCampaignInfo() public view returns (string memory, uint, bool, bool, address [] memory) {
-        return (name, voteCount, hasAnyCandidates, !isVoterVotes[msg.sender], candidatesAddresses);
+    function getCampaignInfo() public view returns (string memory, uint, bool, address [] memory) {
+        address[] memory _addresses = new address[](candidates.length);
+        for(uint i; i< candidates.length; i++){
+            _addresses[i] = address(candidates[i]);
+        }
+        return (name, voteCount, !isVoterVotes[msg.sender], _addresses);
     }
 
 
@@ -61,18 +66,6 @@ contract Campaign {
 
     function getName() public view returns (string memory) {
         return name;
-    }
-
-    function getVoteCount() public view returns (uint){
-        return voteCount;
-    }
-
-    function hasAtLeastOneCandidate() public view returns (bool) {
-        return hasAnyCandidates;
-    }
-
-    function canUserVote() public view returns (bool) {
-        return !isVoterVotes[msg.sender];
     }
 
 }

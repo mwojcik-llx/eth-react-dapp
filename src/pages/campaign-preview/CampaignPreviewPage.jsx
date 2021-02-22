@@ -40,7 +40,6 @@ class CampaignPreviewPage extends Component {
     }
 
     async componentDidMount() {
-        this.subscribeToEvents();
         const account = await getAccounts(this.props.history);
         const campaign = await this.getCampaignInfo();
 
@@ -56,9 +55,7 @@ class CampaignPreviewPage extends Component {
         const voteCount = result[1] || 0;
         const hasCandidates = result[2] || 0;
         const canVote = result[3] || 0;
-        let candidatesIds = result[4] || [];
-
-        candidatesIds = candidatesIds.filter(s => s !== '0x0000000000000000000000000000000000000000');
+        const candidatesIds = result[4] || [];
 
         const candidatesNames = await Promise.all(candidatesIds.map(candidateId => this.state.contract.methods.getCandidateNameById(candidateId).call()));
 

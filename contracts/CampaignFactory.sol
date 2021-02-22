@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity >=0.4.22 <0.9.0;
 
 import "./Campaign.sol";
@@ -27,11 +28,11 @@ contract CampaignFactory {
         bool[] memory _canVote = new bool[](campaigns.length);
 
         for (uint i = 0; i < campaigns.length; i++) {
+            address[] memory candidatesArray;
+
+            ( _names[i],  _voteCounters[i], _canVote[i], candidatesArray) = campaigns[i].getCampaignInfo();
             _addresses[i] = address(campaigns[i]);
-            _names[i] = campaigns[i].getName();
-            _voteCounters[i] = campaigns[i].getVoteCount();
-            _anyCandidates[i] = campaigns[i].hasAtLeastOneCandidate();
-            _canVote[i] = campaigns[i].canUserVote();
+            _anyCandidates[i] = candidatesArray.length > 0;
         }
         //  TODO: add string[] with names to return values
 
