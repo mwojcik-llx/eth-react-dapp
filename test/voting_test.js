@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const Voting = artifacts.require('./Voting');
 const truffleAssert = require('truffle-assertions');
 
@@ -16,7 +17,7 @@ contract('Voting', () => {
             expect(campaignCounter.toNumber()).to.equal(0);
         });
 
-        it('should throw error when try to get not existed campaign name', async () => {
+        it('should throw error when try to get not existed campaign-preview name', async () => {
             let throwsError = false;
             await contractInstance.getCampaignNameByIndex(3)
                 .catch(() => {
@@ -25,14 +26,14 @@ contract('Voting', () => {
             expect(throwsError).to.equal(true);
         });
 
-        it('should getCandidatesCountByCampaignId throw exception when campaign id not exists', async () => {
+        it('should getCandidatesCountByCampaignId throw exception when campaign-preview id not exists', async () => {
             let throwsError = false;
             await contractInstance.getCandidatesCountByCampaignId(0).catch(() => { throwsError = true });
 
             expect(throwsError).to.equal(true);
         });
 
-        it('should addCandidateToCampaign throw exception when campaign index not exists', async () => {
+        it('should addCandidateToCampaign throw exception when campaign-preview index not exists', async () => {
             let throwsError = false;
             await contractInstance.addCandidateToCampaign(0, 'sample').catch(() => { throwsError = true });
 
@@ -49,7 +50,7 @@ contract('Voting', () => {
             expect(campaignCounter.toNumber()).to.equal(1);
         });
 
-        it('should getCampaignNameByIndex return expected campaign name', async () => {
+        it('should getCampaignNameByIndex return expected campaign-preview name', async () => {
             const expectedCampaignName = 'sample';
 
             await contractInstance.addCampaign(expectedCampaignName);
@@ -58,7 +59,7 @@ contract('Voting', () => {
         });
 
         it('should emit CampaignCreatedEvent when method succeed', async () => {
-            const exampleCampaignName = 'campaign';
+            const exampleCampaignName = 'campaign-preview';
 
             const result = await contractInstance.addCampaign(exampleCampaignName);
 
@@ -66,7 +67,7 @@ contract('Voting', () => {
         });
 
         it('should emit CampaignCreatedEvent with correct parameters when method succeed', async () => {
-            const exampleCampaignName = 'campaign';
+            const exampleCampaignName = 'campaign-preview';
             const expectedCampaignIndex = 0;
 
             const result = await contractInstance.addCampaign(exampleCampaignName);
@@ -78,7 +79,7 @@ contract('Voting', () => {
             });
         });
 
-        describe('should be able to register campaign with name contains ...', () => {
+        describe('should be able to register campaign-preview with name contains ...', () => {
             const execute = (expectedCampaignName) => {
                 return contractInstance.addCampaign(expectedCampaignName)
                     .then(() => contractInstance.getCampaignCount())
@@ -88,7 +89,7 @@ contract('Voting', () => {
             }
 
             it('space in name', async () => {
-                await execute('sample campaign name');
+                await execute('sample campaign-preview name');
             });
 
             it('capitalized name', async () => {
@@ -107,7 +108,7 @@ contract('Voting', () => {
     });
 
 
-    describe('when one campaign is created with no candidates', () => {
+    describe('when one campaign-preview is created with no candidates', () => {
         const GIVEN_CAMPAIGN_INDEX = 0;
         beforeEach(async () => {
             await contractInstance.addCampaign('Example Campaign');

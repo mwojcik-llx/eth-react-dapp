@@ -1,0 +1,12 @@
+.page-not-found {
+    text-align: center;
+    margin: 25vh auto;
+}
+
+.page-not-found__error-code {
+    font-size: 6em;
+}
+
+.page-not-found__error-message {
+    font-size: 2em;
+}
