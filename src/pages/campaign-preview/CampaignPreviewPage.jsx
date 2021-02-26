@@ -53,9 +53,8 @@ class CampaignPreviewPage extends Component {
         const result = await this.state.contract.methods.getCampaignInfo().call();
         const name = result[0] || '';
         const voteCount = result[1] || 0;
-        const hasCandidates = result[2] || 0;
-        const canVote = result[3] || 0;
-        const candidatesIds = result[4] || [];
+        const canVote = result[2] || 0;
+        const candidatesIds = result[3] || [];
 
         const candidatesNames = await Promise.all(candidatesIds.map(candidateId => this.state.contract.methods.getCandidateNameById(candidateId).call()));
 
@@ -69,7 +68,6 @@ class CampaignPreviewPage extends Component {
         return {
             name,
             voteCount,
-            hasCandidates,
             canVote,
             candidates
         }
