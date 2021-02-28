@@ -9,3 +9,35 @@ export async function getAccounts(history) {
     }
     return accounts[0];
 }
+
+export function registerLoggedInAccountsWatcher(history, callback) {
+    if (!window.ethereum) {
+        alert('To use dApps you need to install some wallet browser plugin. Check out i.e. MetaMask.');
+        return false;
+    }
+
+    tryLogin().then(accounts => {
+        onAccountChange(accounts, history, callback);
+
+        window.ethereum.on('accountsChanged', (accounts) => onAccountChange(accounts, history, callback));
+    });
+}
+
+export const tryLogin = async () => await window.ethereum.request({method: 'eth_requestAccounts'});
+
+const onAccountChange = (accounts, history, callback) => {
+    console.log('Logged in to accounts:', accounts);
+    if (accounts.length !== 1) {
+        const message = accounts.length === 0 ?
+            'You must be logged in to use dApp.' :
+            'You must be logged in to only one account at one time.';
+        alert(message);
+        callback(null);
+
+        history.push('/login');
+    } else {
+        callback(accounts[0]);
+        history.push('/');
+    }
+    console.log('history', history);
+}
