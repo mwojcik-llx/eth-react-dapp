@@ -2,28 +2,24 @@ import Web3 from 'web3';
 
 export const web3 = new Web3(window.web3.currentProvider);
 
-export async function getAccounts(history) {
-    const accounts = await web3.eth.getAccounts();
-    if (!accounts.length || accounts.length !== 1) {
-        history.push('/login');
-    }
-    return accounts[0];
-}
+export const tryLogin = async () => await window.ethereum.request({method: 'eth_requestAccounts'});
 
-export function registerLoggedInAccountsWatcher(history, callback) {
+export function registerLoggedInAccountsWatcher(history, callback, loginOnPageLoad) {
     if (!window.ethereum) {
         alert('To use dApps you need to install some wallet browser plugin. Check out i.e. MetaMask.');
         return false;
     }
 
-    tryLogin().then(accounts => {
-        onAccountChange(accounts, history, callback);
+    if (loginOnPageLoad) {
+        tryLogin().then(accounts => {
+            onAccountChange(accounts, history, callback);
 
+            window.ethereum.on('accountsChanged', (accounts) => onAccountChange(accounts, history, callback));
+        });
+    } else {
         window.ethereum.on('accountsChanged', (accounts) => onAccountChange(accounts, history, callback));
-    });
+    }
 }
-
-export const tryLogin = async () => await window.ethereum.request({method: 'eth_requestAccounts'});
 
 const onAccountChange = (accounts, history, callback) => {
     console.log('Logged in to accounts:', accounts);
@@ -39,5 +35,4 @@ const onAccountChange = (accounts, history, callback) => {
         callback(accounts[0]);
         history.push('/');
     }
-    console.log('history', history);
 }
