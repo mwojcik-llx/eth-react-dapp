@@ -3,11 +3,11 @@ import { Button, Card, Container, Grid, Header, Image } from "semantic-ui-react"
 import { Link, withRouter } from "react-router-dom";
 import { getAccounts, CampaignFactoryContractBuilder } from '../../web3';
 
-import './HomePage.css';
+import './CampaignListPage.css';
 import campaignLogo from '../../assets/campaign-logo.png';
 import PromptModal from "../../components/PromptModal";
 
-class HomePage extends Component {
+class CampaignListPage extends Component {
 
 
     constructor(props) {
@@ -122,4 +122,4 @@ class HomePage extends Component {
     }
 }
 
-export default withRouter(HomePage);
+export default withRouter(CampaignListPage);

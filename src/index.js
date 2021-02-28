@@ -5,10 +5,10 @@ import 'semantic-ui-css/semantic.min.css'
 
 import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
 import { Menu } from "semantic-ui-react";
-import HomePage from "./pages/home/HomePage";
+import CampaignListPage from "./pages/campaign-list/CampaignListPage";
 import CampaignPreviewPage from "./pages/campaign-preview/CampaignPreviewPage";
-import VotingPage from "./pages/voting/VotingPage";
 import NotFoundPage from "./pages/not-found/NotFoundPage";
+import LoginPage from "./pages/login/LoginPage";
 
 ReactDOM.render(
     <React.Fragment>
@@ -20,13 +20,13 @@ ReactDOM.render(
 
             <Switch>
                 <Route exact path='/'>
-                    <HomePage/>
+                    <CampaignListPage/>
                 </Route>
                 <Route path='/campaign/:campaignId'>
                     <CampaignPreviewPage/>
                 </Route>
-                <Route path='/vote/:campaignId'>
-                    <VotingPage/>
+                <Route path='/login'>
+                    <LoginPage/>
                 </Route>
                 <Route>
                     <NotFoundPage/>
