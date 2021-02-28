@@ -2,37 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import 'semantic-ui-css/semantic.min.css'
-
-import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
-import { Menu } from "semantic-ui-react";
-import HomePage from "./pages/home/HomePage";
-import CampaignPreviewPage from "./pages/campaign-preview/CampaignPreviewPage";
-import VotingPage from "./pages/voting/VotingPage";
-import NotFoundPage from "./pages/not-found/NotFoundPage";
+import App from "./App";
 
 ReactDOM.render(
     <React.Fragment>
-        <Router>
-            <Menu inverted>
-                <Menu.Item as={Link} to='/'>Home</Menu.Item>
-                <Menu.Item as={Link} to='/404'>Not Found</Menu.Item>
-            </Menu>
-
-            <Switch>
-                <Route exact path='/'>
-                    <HomePage/>
-                </Route>
-                <Route path='/campaign/:campaignId'>
-                    <CampaignPreviewPage/>
-                </Route>
-                <Route path='/vote/:campaignId'>
-                    <VotingPage/>
-                </Route>
-                <Route>
-                    <NotFoundPage/>
-                </Route>
-            </Switch>
-        </Router>
+        <App/>
     </React.Fragment>,
     document.getElementById('root')
 );

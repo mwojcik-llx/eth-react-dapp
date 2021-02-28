@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Button, Container, Header, List } from "semantic-ui-react";
-import { getAccounts, CampaignContractBuilder } from "../../web3";
+import { CampaignContractBuilder } from "../../web3";
 import PromptModal from "../../components/PromptModal";
 
 class CampaignPreviewPage extends Component {
@@ -40,11 +40,9 @@ class CampaignPreviewPage extends Component {
     }
 
     async componentDidMount() {
-        const account = await getAccounts(this.props.history);
         const campaign = await this.getCampaignInfo();
 
         this.setState({
-            account: account,
             campaign: campaign
         });
     }
@@ -75,7 +73,7 @@ class CampaignPreviewPage extends Component {
 
     async createCandidate(candidateName) {
         await this.state.contract.methods.createCandidate(candidateName).send({
-            from: this.state.account
+            from: this.props.account
         }).then((err, res) => {
             console.log(err,res);
         });

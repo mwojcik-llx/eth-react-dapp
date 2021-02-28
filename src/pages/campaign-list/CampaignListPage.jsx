@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Button, Card, Container, Grid, Header, Image } from "semantic-ui-react";
 import { Link, withRouter } from "react-router-dom";
-import { getAccounts, CampaignFactoryContractBuilder } from '../../web3';
+import { CampaignFactoryContractBuilder } from '../../web3';
 
-import './HomePage.css';
+import './CampaignListPage.css';
 import campaignLogo from '../../assets/campaign-logo.png';
 import PromptModal from "../../components/PromptModal";
 
-class HomePage extends Component {
+class CampaignListPage extends Component {
 
 
     constructor(props) {
@@ -18,7 +18,6 @@ class HomePage extends Component {
         this.state = {
             campaigns: [],
             contract: contract,
-            account: ''
         }
         this.subscribeToEvents();
 
@@ -45,12 +44,6 @@ class HomePage extends Component {
     }
 
     async componentDidMount() {
-        const account = await getAccounts(this.props.history);
-
-        this.setState({
-            account
-        });
-
         this.setState({
             campaigns: await this._createCampaignsArray(),
         });
@@ -79,7 +72,7 @@ class HomePage extends Component {
 
     async createNewCampaign(campaignName) {
         await this.state.contract.methods.createCampaign(campaignName)
-            .send({from: this.state.account})
+            .send({from: this.props.account})
             .catch(err => {
                 console.error(err);
                 //TODO: show error ?
@@ -122,4 +115,4 @@ class HomePage extends Component {
     }
 }
 
-export default withRouter(HomePage);
+export default withRouter(CampaignListPage);
