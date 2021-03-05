@@ -5,7 +5,9 @@ import campaignAbi from './Campaign.json';
 const campaignFactoryAddress = '0xb47e7B3eec6735360dbE59ED5Af06e3aDC62B9dC';
 
 function createContract(abi, contractAddress) {
-    return new web3.eth.Contract(abi, contractAddress);
+    return new web3.eth.Contract(abi, contractAddress, {
+        gasPrice: '0',
+    });
 }
 
 export class CampaignFactoryContractBuilder {
