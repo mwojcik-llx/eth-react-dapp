@@ -11,7 +11,9 @@ export function registerLoggedInAccountsWatcher(history, callback, loginOnPageLo
     }
 
     if (loginOnPageLoad) {
-        tryLogin().then(accounts => {
+        tryLogin()
+            .catch(() => [])
+            .then(accounts => {
             onAccountChange(accounts, history, callback);
 
             window.ethereum.on('accountsChanged', (accounts) => onAccountChange(accounts, history, callback));

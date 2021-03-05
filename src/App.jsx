@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Link, Route, Switch, Redirect } from "react-router-dom";
 import { Menu } from "semantic-ui-react";
 import CampaignListPage from "./pages/campaign-list/CampaignListPage";
 import CampaignPreviewPage from "./pages/campaign-preview/CampaignPreviewPage";
@@ -22,29 +22,46 @@ class App extends Component {
         });
     }
 
+    authorizedRoutes() {
+        return (
+            <Switch>
+                <Route exact path='/'>
+                    <CampaignListPage account={this.state.account}/>
+                </Route>
+
+                <Route path='/campaign/:campaignId'>
+                    <CampaignPreviewPage account={this.state.account}/>
+                </Route>
+                <Route path='/login'>
+                    <Redirect to='/'/>
+                </Route>
+                <Route>
+                    <NotFoundPage/>
+                </Route>
+            </Switch>
+        );
+    }
+
     render() {
         return (
             <React.Fragment>
                 <Router>
                     <Menu inverted>
                         <Menu.Item as={Link} to='/'>Home</Menu.Item>
-                        <Menu.Item as={Link} to='/404'>Not Found</Menu.Item>
                     </Menu>
                     <LoginWatcher onAccountChanged={(account) => this.setAccount(account)}/>
-                    <Switch>
-                        <Route exact path='/'>
-                            <CampaignListPage account={this.state.account}/>
-                        </Route>
-                        <Route path='/campaign/:campaignId'>
-                            <CampaignPreviewPage account={this.state.account}/>
-                        </Route>
-                        <Route path='/login'>
-                            <LoginPage/>
-                        </Route>
-                        <Route>
-                            <NotFoundPage/>
-                        </Route>
-                    </Switch>
+                    {this.state.account ?
+                        this.authorizedRoutes() :
+                        <Switch>
+                            <Route path='/login'>
+                                <LoginPage/>
+                            </Route>
+                            <Route>
+                                <Redirect to='/login'/>
+                            </Route>
+                        </Switch>
+
+                    }
                 </Router>
             </React.Fragment>
         )
