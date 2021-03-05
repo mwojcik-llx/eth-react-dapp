@@ -40,10 +40,15 @@ class CampaignPreviewPage extends Component {
     }
 
     async componentDidMount() {
-        const campaign = await this.getCampaignInfo();
+        const {name, voteCount, canVote, candidates} = await this.getCampaignInfo();
 
         this.setState({
-            campaign: campaign
+            campaign: {
+                name,
+                voteCount,
+                candidates
+            },
+            canUserVote: canVote
         });
     }
 
@@ -74,9 +79,18 @@ class CampaignPreviewPage extends Component {
     async createCandidate(candidateName) {
         await this.state.contract.methods.createCandidate(candidateName).send({
             from: this.props.account
-        }).then((err, res) => {
-            console.log(err,res);
         });
+    }
+
+    async voteForCandidate(candidateId) {
+        await this.state.contract.methods.voteForCandidate(candidateId)
+            .send({from: this.props.account})
+            .then(() => {
+                this.setState({
+                    canUserVote: false,
+                    gas: 0
+                });
+            });
     }
 
     render() {
@@ -92,12 +106,25 @@ class CampaignPreviewPage extends Component {
                 </div>
                 <Header as='h1' textAlign='center'>{this.state.campaign?.name}</Header>
                 <br/>
+                {!!this.state.campaign?.candidates?.length && !this.state.canUserVote ?
+                    <Message color='green'>
+                        <Message.Header>
+                            Thank you for your vote.
+                        </Message.Header>
+                        <Message.Content>
+                            You successfully vote in this campaign.
+                        </Message.Content>
+                    </Message> : null
+                }
                 <List divided verticalAlign='middle'>
                     <List.Header as='h2'>Candidates:</List.Header>
                     {this.state.campaign?.candidates?.map(candidate => (
                         <List.Item key={candidate.id}>
                             <List.Content floated='right'>
-                                <Button>Vote</Button>
+                                <Button disabled={!this.state.canUserVote}
+                                        onClick={() => this.voteForCandidate(candidate.id)}>
+                                    Vote
+                                </Button>
                             </List.Content>
                             <List.Content>{candidate.name}</List.Content>
                         </List.Item>
