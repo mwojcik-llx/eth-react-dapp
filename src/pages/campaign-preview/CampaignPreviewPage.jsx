@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Button, Container, Header, List } from "semantic-ui-react";
+import { Button, Container, Header, List, Message } from "semantic-ui-react";
 import { CampaignContractBuilder } from "../../web3";
 import PromptModal from "../../components/PromptModal";
 
@@ -93,7 +93,7 @@ class CampaignPreviewPage extends Component {
                 <Header as='h1' textAlign='center'>{this.state.campaign?.name}</Header>
                 <br/>
                 <List divided verticalAlign='middle'>
-                    <List.Header as='h2'>Candidates</List.Header>
+                    <List.Header as='h2'>Candidates:</List.Header>
                     {this.state.campaign?.candidates?.map(candidate => (
                         <List.Item key={candidate.id}>
                             <List.Content floated='right'>
@@ -103,6 +103,14 @@ class CampaignPreviewPage extends Component {
                         </List.Item>
                     ))}
                 </List>
+                {!!this.state.campaign?.candidates?.length ? null :
+                    <Message color='yellow'>
+                        <Message.Header>Sorry there is no candidates to vote.</Message.Header>
+                        <Message.Content>
+                            You can <strong>Add Candidate</strong> if you want.
+                        </Message.Content>
+                    </Message>
+                }
             </Container>
         );
     }
