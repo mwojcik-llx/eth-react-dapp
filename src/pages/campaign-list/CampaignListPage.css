@@ -5,6 +5,12 @@
     padding: 10px;
 }
 
+.campaign-name-header {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
 @media screen and (max-width: 1024px) {
     .ui.grid {
         justify-content: center;

@@ -95,7 +95,7 @@ class CampaignListPage extends Component {
                         <Card key={campaign.id}>
                             <Image src={campaignLogo} wrapped ui={false}/>
                             <Card.Content>
-                                <Card.Header>{campaign.name}</Card.Header>
+                                <Card.Header className='campaign-name-header'>{campaign.name}</Card.Header>
                                 <Card.Meta>
                                     <div>Vote count: {campaign.voteCount}</div>
                                     <div>Has candidates: {campaign.hasCandidates ? 'True' : 'False'}</div>
