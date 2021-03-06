@@ -32,7 +32,7 @@ contract CampaignFactory {
         for (uint i = 0; i < campaigns.length; i++) {
             address[] memory candidatesArray;
 
-            ( _names[i],  _voteCounters[i], _canVote[i], candidatesArray, _isActive[i], _userIsOwner[i]) = campaigns[i].getCampaignInfo();
+            ( _names[i],  _voteCounters[i], _canVote[i], candidatesArray, _isActive[i], _userIsOwner[i]) = campaigns[i].getCampaignInfo(msg.sender);
             _addresses[i] = address(campaigns[i]);
             _anyCandidates[i] = candidatesArray.length > 0;
         }

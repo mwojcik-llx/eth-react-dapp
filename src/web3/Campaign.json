@@ -80,37 +80,81 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "senderAddress",
+        "type": "address"
+      }
+    ],
+    "name": "getCampaignInfo",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "_name",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_voteCount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "_userCanVote",
+        "type": "bool"
+      },
+      {
+        "internalType": "address[]",
+        "name": "_candidatesAddresses",
+        "type": "address[]"
+      },
+      {
+        "internalType": "bool",
+        "name": "_isActive",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "_userIsOwner",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "getCampaignInfo",
     "outputs": [
       {
         "internalType": "string",
-        "name": "",
+        "name": "_name",
         "type": "string"
       },
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "_voteCount",
         "type": "uint256"
       },
       {
         "internalType": "bool",
-        "name": "",
+        "name": "_userCanVote",
         "type": "bool"
       },
       {
         "internalType": "address[]",
-        "name": "",
+        "name": "_candidatesAddresses",
         "type": "address[]"
       },
       {
         "internalType": "bool",
-        "name": "",
+        "name": "_isActive",
         "type": "bool"
       },
       {
         "internalType": "bool",
-        "name": "",
+        "name": "_userIsOwner",
         "type": "bool"
       }
     ],
@@ -129,7 +173,7 @@
     "outputs": [
       {
         "internalType": "string",
-        "name": "",
+        "name": "_candidateName",
         "type": "string"
       }
     ],
@@ -142,7 +186,7 @@
     "outputs": [
       {
         "internalType": "string",
-        "name": "",
+        "name": "_name",
         "type": "string"
       }
     ],
@@ -155,17 +199,17 @@
     "outputs": [
       {
         "internalType": "address[]",
-        "name": "",
+        "name": "_candidateAddresses",
         "type": "address[]"
       },
       {
         "internalType": "uint256[]",
-        "name": "",
+        "name": "_candidateVoteCounts",
         "type": "uint256[]"
       },
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "_generalVoteCount",
         "type": "uint256"
       }
     ],

@@ -31,6 +31,7 @@ contract Campaign {
 
     function createCandidate(string memory _candidateName) public {
         require(bytes(_candidateName).length > 0 && !isCandidateExists[_candidateName]);
+        require(isActive, 'Cannot add new candidates to not active campaign');
 
         Candidate _candidate = new Candidate(_candidateName);
         candidates.push(_candidate);
@@ -57,7 +58,8 @@ contract Campaign {
     }
 
     function endTheVoting() public {
-        require(msg.sender == campaignOwner);
+        require(msg.sender == campaignOwner, 'Only owner can end the voting.');
+        require(isActive, 'You cannot end not active campaign.');
 
         uint actualBalance = address(this).balance;
 
@@ -72,26 +74,37 @@ contract Campaign {
 
     // GETTERS
 
-    function getCampaignInfo() public view returns (string memory, uint, bool, address [] memory, bool, bool) {
+    function getCampaignInfo() public view returns (string memory _name, uint _voteCount, bool _userCanVote, address [] memory _candidatesAddresses, bool _isActive, bool _userIsOwner) {
         address[] memory _addresses = new address[](candidates.length);
         for(uint i; i< candidates.length; i++){
             _addresses[i] = address(candidates[i]);
         }
-        // TODO: HERE IS PROBLEM AND msg.sender never equals campaignOwner - investigate why
-        return (name, voteCount, !isVoterVotes[msg.sender], _addresses, isActive, msg.sender == campaignOwner);
+
+        _name = name;
+        _voteCount = voteCount;
+        _userCanVote = !isVoterVotes[msg.sender];
+        _candidatesAddresses = _addresses;
+        _isActive = isActive;
+        _userIsOwner = msg.sender == campaignOwner;
+    }
+
+    function getCampaignInfo(address senderAddress) external view returns (string memory _name, uint _voteCount, bool _userCanVote, address [] memory _candidatesAddresses, bool _isActive, bool _userIsOwner) {
+        (_name, _voteCount, _userCanVote, _candidatesAddresses, _isActive,) = getCampaignInfo();
+        _userIsOwner = senderAddress == campaignOwner;
+
     }
 
 
-    function getCandidateNameById(address candidateAddress) public view returns (string memory) {
+    function getCandidateNameById(address candidateAddress) public view returns (string memory _candidateName) {
         require(isAddressExists[candidateAddress]);
-        return Candidate(candidateAddress).getName();
+        (_candidateName) = Candidate(candidateAddress).getName();
     }
 
-    function getName() public view returns (string memory) {
-        return name;
+    function getName() public view returns (string memory _name) {
+        _name = name;
     }
 
-    function getResults() public view returns  (address [] memory, uint[] memory, uint){
+    function getResults() public view returns  (address [] memory _candidateAddresses, uint[] memory _candidateVoteCounts, uint _generalVoteCount){
         require(!isActive, 'Cannot view results of active campaign');
         require(candidates.length > 0, 'Empty results. No candidates.');
         require(voteCount > 0, 'No vote count.');
@@ -105,7 +118,9 @@ contract Campaign {
             _voteCount[i] = _candidate.getVoteCount();
         }
 
-        return (_addresses, _voteCount, voteCount);
+        _candidateAddresses = _addresses;
+        _candidateVoteCounts = _voteCount;
+        _generalVoteCount = voteCount;
     }
 
 }
