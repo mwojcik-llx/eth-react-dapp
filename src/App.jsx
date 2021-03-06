@@ -12,13 +12,15 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            account: ''
+            account: '',
+            showContent: false
         }
     }
 
     setAccount(account) {
         this.setState({
-            account: account
+            account: account,
+            showContent: true
         });
     }
 
@@ -52,14 +54,16 @@ class App extends Component {
                     <LoginWatcher onAccountChanged={(account) => this.setAccount(account)}/>
                     {this.state.account ?
                         this.authorizedRoutes() :
-                        <Switch>
-                            <Route path='/login'>
-                                <LoginPage/>
-                            </Route>
-                            <Route>
-                                <Redirect to='/login'/>
-                            </Route>
-                        </Switch>
+                        !this.state.showContent ?
+                            null :
+                            <Switch>
+                                <Route path='/login'>
+                                    <LoginPage/>
+                                </Route>
+                                <Route>
+                                    <Redirect to='/login'/>
+                                </Route>
+                            </Switch>
 
                     }
                 </Router>

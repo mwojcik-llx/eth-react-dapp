@@ -26,10 +26,10 @@ export function registerLoggedInAccountsWatcher(history, callback, loginOnPageLo
 const onAccountChange = (accounts, history, callback) => {
     console.log('Logged in to accounts:', accounts);
     if (accounts.length !== 1) {
-        const message = accounts.length === 0 ?
-            'You must be logged in to use dApp.' :
-            'You must be logged in to only one account at one time.';
-        alert(message);
+        // const message = accounts.length === 0 ?
+        //     'You must be logged in to use dApp.' :
+        //     'You must be logged in to only one account at one time.';
+        // alert(message);
         callback(null);
 
         history.push('/login');
