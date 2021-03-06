@@ -2,7 +2,7 @@ import { web3 } from "./web3";
 import campaignFactoryAbi from './CampaignFactory.json';
 import campaignAbi from './Campaign.json';
 
-const campaignFactoryAddress = '0xb47e7B3eec6735360dbE59ED5Af06e3aDC62B9dC';
+const campaignFactoryAddress = '0xf9BEa492ceCedb587fDc6be23C1537a1c11d6424';
 
 function createContract(abi, contractAddress) {
     return new web3.eth.Contract(abi, contractAddress, {

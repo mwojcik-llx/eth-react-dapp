@@ -1,11 +1,13 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity >=0.4.22 <0.9.0;
+pragma solidity 0.8.1;
 
 import "./Candidate.sol";
 
 contract Campaign {
 
     string name;
+    address campaignOwner;
+    bool isActive;
 
     Candidate[] candidates;
     mapping(string => bool) isCandidateExists;
@@ -15,10 +17,14 @@ contract Campaign {
     mapping(address => bool) isVoterVotes;
 
     event CandidateCreated(address, string);
+    event UserVoted();
+    event VotingEnded();
 
 
-    constructor(string memory _name) {
+    constructor(string memory _name, address _campaignOwner) {
         name = _name;
+        isActive = true;
+        campaignOwner = _campaignOwner;
     }
 
     // SETTERS
@@ -37,25 +43,41 @@ contract Campaign {
         emit CandidateCreated(candidateAddress, _candidateName);
     }
 
-    function voteForCandidate(address candidateAddress) public {
+    function voteForCandidate(address candidateAddress) public payable {
         require(isAddressExists[candidateAddress] && !isVoterVotes[msg.sender]);
+        require(msg.value >= 1, 'Minimal payment for voting is 1 wei');
+        require(isActive, 'This campaign is not active. You can only view results.');
 
         Candidate candidate = Candidate(candidateAddress);
         candidate.vote();
 
         voteCount++;
         isVoterVotes[msg.sender] = true;
+        emit UserVoted();
+    }
+
+    function endTheVoting() public {
+        require(msg.sender == campaignOwner);
+
+        uint actualBalance = address(this).balance;
+
+        address payable _address = payable(msg.sender);
+
+        if(_address.send(actualBalance)){
+            isActive = false;
+            emit VotingEnded();
+        }
     }
 
 
     // GETTERS
 
-    function getCampaignInfo() public view returns (string memory, uint, bool, address [] memory) {
+    function getCampaignInfo() public view returns (string memory, uint, bool, address [] memory, bool, bool) {
         address[] memory _addresses = new address[](candidates.length);
         for(uint i; i< candidates.length; i++){
             _addresses[i] = address(candidates[i]);
         }
-        return (name, voteCount, !isVoterVotes[msg.sender], _addresses);
+        return (name, voteCount, !isVoterVotes[msg.sender], _addresses, isActive, msg.sender == campaignOwner);
     }
 
 
@@ -66,6 +88,23 @@ contract Campaign {
 
     function getName() public view returns (string memory) {
         return name;
+    }
+
+    function getResults() public view returns  (address [] memory, uint[] memory, uint){
+        require(!isActive, 'Cannot view results of active campaign');
+        require(candidates.length > 0, 'Empty results. No candidates.');
+        require(voteCount > 0, 'No vote count.');
+
+        address[] memory _addresses = new address[](candidates.length);
+        uint[] memory _voteCount = new uint[](candidates.length);
+
+        for(uint i; i< candidates.length; i++){
+            Candidate _candidate = Candidate(candidates[i]);
+            _addresses[i] = address(candidates[i]);
+            _voteCount[i] = _candidate.getVoteCount();
+        }
+
+        return (_addresses, _voteCount, voteCount);
     }
 
 }
