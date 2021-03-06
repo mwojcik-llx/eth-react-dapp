@@ -2,33 +2,43 @@ import { web3 } from "./web3";
 import campaignFactoryAbi from './CampaignFactory.json';
 import campaignAbi from './Campaign.json';
 
-const campaignFactoryAddress = '0xf9BEa492ceCedb587fDc6be23C1537a1c11d6424';
+class BaseContractBuilder {
+    _address = '';
+    _abiDefinition = [];
+    _options = {};
 
-function createContract(abi, contractAddress) {
-    return new web3.eth.Contract(abi, contractAddress, {
-        gasPrice: '0',
-    });
-}
-
-export class CampaignFactoryContractBuilder {
-    address = campaignFactoryAddress;
-    abi = campaignFactoryAbi;
-
-    build() {
-        return createContract(this.abi, this.address);
+    constructor(abiDefinition, options) {
+        this._abiDefinition = abiDefinition;
+        this._options = options || {gasPrice: '0'};
     }
-}
 
-export class CampaignContractBuilder {
-    address = '';
-    abi = campaignAbi;
-
-    withAddress(contractAddress){
-        this.address = contractAddress;
+    withAddress(contractAddress) {
+        this._address = contractAddress;
         return this;
     }
 
     build() {
-        return createContract(this.abi, this.address);
+        if (!this._abiDefinition) {
+            throw new Error('Please provide abi definition to builder.');
+        }
+
+        if (!this._address) {
+            throw new Error('Please provide contract address to builder.');
+        }
+
+        return new web3.eth.Contract(this._abiDefinition, this._address, this._options);
+    }
+
+}
+
+export class CampaignFactoryContractBuilder extends BaseContractBuilder {
+    constructor() {
+        super(campaignFactoryAbi);
+    }
+}
+
+export class CampaignContractBuilder extends BaseContractBuilder {
+    constructor() {
+        super(campaignAbi);
     }
 }
