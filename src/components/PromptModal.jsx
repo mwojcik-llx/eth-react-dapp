@@ -16,7 +16,7 @@ class PromptModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isOpened: false,
+            isOpen: false,
             inputValue: '',
             isSubmitDisabled: true,
         }

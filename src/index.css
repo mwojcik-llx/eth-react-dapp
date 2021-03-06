@@ -6,4 +6,6 @@
 .create-button-container {
     text-align: end;
     padding: 0 10px;
+    display: flex;
+    flex-direction: row-reverse;
 }
