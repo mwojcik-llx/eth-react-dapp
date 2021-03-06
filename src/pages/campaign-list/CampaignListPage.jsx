@@ -6,6 +6,7 @@ import { CampaignFactoryContractBuilder } from '../../web3';
 import './CampaignListPage.css';
 import campaignLogo from '../../assets/campaign-logo.png';
 import PromptModal from "../../components/PromptModal";
+import { GLOBAL_CONST } from "../../global.const";
 
 class CampaignListPage extends Component {
 
@@ -13,7 +14,9 @@ class CampaignListPage extends Component {
     constructor(props) {
         super(props);
 
-        const contract = new CampaignFactoryContractBuilder().build();
+        const contract = new CampaignFactoryContractBuilder()
+            .withAddress(GLOBAL_CONST.CAMPAIGN_FACTORY_ADDRESS)
+            .build();
 
         this.state = {
             campaigns: [],
