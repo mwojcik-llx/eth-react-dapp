@@ -77,6 +77,7 @@ contract Campaign {
         for(uint i; i< candidates.length; i++){
             _addresses[i] = address(candidates[i]);
         }
+        // TODO: HERE IS PROBLEM AND msg.sender never equals campaignOwner - investigate why
         return (name, voteCount, !isVoterVotes[msg.sender], _addresses, isActive, msg.sender == campaignOwner);
     }
 

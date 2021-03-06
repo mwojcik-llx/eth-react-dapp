@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Card, Container, Grid, Header, Image } from "semantic-ui-react";
+import { Button, Card, Container, Grid, Header, Image, Label, Message } from "semantic-ui-react";
 import { Link, withRouter } from "react-router-dom";
 import { CampaignFactoryContractBuilder } from '../../web3';
 
@@ -37,6 +37,8 @@ class CampaignListPage extends Component {
                         voteCount: 0,
                         hasCandidates: false,
                         canVote: false,
+                        isActive: true,
+                        isUserOwner: true,
                     }
                 ]
             });
@@ -58,13 +60,17 @@ class CampaignListPage extends Component {
         const voteCountsArray = result[1];
         const hasCandidatesArray = result[2];
         const canVoteArray = result[3];
+        const isActiveArray = result[4];
+        const isUserOwnerArray = result[5];
 
-        return addressesArray.map((add, index) => ({
-            id: add,
+        return addressesArray.map((address, index) => ({
+            id: address,
             name: namesArray[index],
             voteCount: voteCountsArray[index],
             hasCandidates: hasCandidatesArray[index],
             canVote: canVoteArray[index],
+            isActive: isActiveArray[index],
+            isUserOwner: isUserOwnerArray[index],
         }));
 
 
@@ -95,10 +101,17 @@ class CampaignListPage extends Component {
                         <Card key={campaign.id}>
                             <Image src={campaignLogo} wrapped ui={false}/>
                             <Card.Content>
+                                {!campaign.isUserOwner ? null :
+                                    <Message color='green'>You are owner of this campaign.</Message>
+                                }
                                 <Card.Header className='campaign-name-header'>{campaign.name}</Card.Header>
                                 <Card.Meta>
                                     <div>Vote count: {campaign.voteCount}</div>
                                     <div>Has candidates: {campaign.hasCandidates ? 'True' : 'False'}</div>
+                                    <div>Status: {campaign.isActive ?
+                                        <Label color='green'>Active</Label> :
+                                        <Label color='orange'>Ended</Label>}
+                                    </div>
                                     <br/>
                                 </Card.Meta>
                                 <Card.Content extra>
